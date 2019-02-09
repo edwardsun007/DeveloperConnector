@@ -3,10 +3,23 @@
 //   , express = require('express')
 //   , app = express();
 
-const https = require("https");
+const https = require("https"); // for HTTPS connection
 const fs = require("fs");
 
 const express = require("express");
+const mongoose = require("mongoose");
+
+// DB config
+const db = require("./config/keys").mongoURI;
+
+mongoose
+  .connect(db)
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(err => {
+    console.log("Connection failed:", err);
+  });
 
 const app = express();
 
