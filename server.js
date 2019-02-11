@@ -20,6 +20,8 @@ mongoose
   });
 
 // parse json
+app.use(bodyParser.urlencoded({ extended: false })); // false to use qs library to access req.body.something
+// when its true then its querystring like ? something in url string
 app.use(bodyParser.json());
 
 // APIS
