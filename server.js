@@ -1,9 +1,10 @@
 const https = require("https"); // for HTTPS connection
 const fs = require("fs");
-
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+
 // create express instance
 const app = express();
 
@@ -31,10 +32,12 @@ const posts = require("./routes/api/posts");
 
 const port = process.env.PORT || 5000; // for Heroku it use process.env.PORT or we use local 5000
 
-// app.get("/", (req, res) => {
-//   console.log("got res");
-//   res.send("Hello");
-// });
+// Passport middleware
+// https://www.npmjs.com/package/passport
+app.use(passport.initialize());
+
+// Passport Config
+require("./config/passport")(passport);
 
 // use routes, here we tell Express to deal each api route separately
 app.use("/api/users", users);
