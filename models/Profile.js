@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "users" },
   handle: {
+    // seo friendly url need to see what exactly is it
     type: String,
     required: true,
     max: 40
@@ -30,7 +31,7 @@ const ProfileSchema = new Schema({
   bio: {
     type: String
   },
-  githubusername: {
+  githubname: {
     type: String
   },
 

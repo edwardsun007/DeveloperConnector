@@ -10,6 +10,9 @@ const Profile = require("../../models/Profile");
 /* Load User profile */
 const User = require("../../models/User");
 
+/* Load validator */
+const validateProfileInput = require("../../validation/profile");
+
 // @route GET api/profile/test
 // @desc Test profile route
 // @access Public
@@ -18,7 +21,7 @@ router.get("/test", (req, res) => {
 });
 
 // @route GET api/profile/
-// @desc Get current user's profile
+// @desc GET current user's profile
 // @access Private--protected route
 router.get(
   "/",
@@ -40,16 +43,64 @@ router.get(
 );
 
 // @route POST api/profile/
-// @desc Create new profile for registered user
+// @desc CREATE new profile or EDIT profile for registered user
 // @access Private -- protected route
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    // validate profileinput
+    const { errors, isValid } = validateProfileInput;
+
     // Get fields
     const profileFields = {};
     profileFields.user = req.user.id;
+    /* pull property from req.body into local profileFields variable */
     if (req.body.handle) profileFields.handle = req.body.handle;
+    if (req.body.company) profileFields.company = req.body.company;
+    if (req.body.website) profileFields.website = req.body.website;
+    if (req.body.location) profileFields.location = req.body.location;
+    if (req.body.bio) profileFields.bio = req.body.bio;
+    if (req.body.status) profileFields.status = req.body.status;
+    if (req.body.githubname) profileFields.githubname = req.body.githubname;
+    // SKILLS Split into array
+    if (typeof req.body.skill !== undefined) {
+      profileFields.skills = req.body.skills.split(",");
+    }
+
+    // pull Social
+    profileFields.social = {}; // initialize empty field
+    if (req.body.linkedIn) profileFields.linkedIn = req.body.linkedIn;
+    if (req.body.youtube) profileFields.youtube = req.body.youtube;
+    if (req.body.twitter) profileFields.twitter = req.body.twitter;
+    if (req.body.facebook) profileFields.facebook = req.body.facebook;
+    if (req.body.instagram) profileFields.instagram = req.body.instagram;
+
+    // determine if its update or create
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      if (profile) {
+        // update
+        Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: profileFields },
+          { new: true }
+        )
+          .then(profile => res.json(profile))
+          .catch(err => res.json(err));
+      } else {
+        // CREATE
+        // CHECK if handle exists
+        Profile.findOne({ handle: profileFields.handle }).then(profile => {
+          if (profile) {
+            errors.handle = "That handle already exists";
+            res.status(400).json(errors);
+          }
+
+          // Save Profile
+          new Profile(profileFields).save().then(profile => res.json(profile));
+        });
+      }
+    });
   }
 );
 module.exports = router;
