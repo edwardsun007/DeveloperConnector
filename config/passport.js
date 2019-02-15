@@ -17,8 +17,8 @@ module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
       // jwt_payload should contain id,name,avatar
-      console.log("passport checking payload got:");
-      console.log(jwt_payload);
+      // console.log("passport checking payload got:");
+      // console.log(jwt_payload);
       User.findById(jwt_payload.id)
         .then(user => {
           if (user) {

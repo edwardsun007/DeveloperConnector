@@ -50,7 +50,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     // validate profileinput
-    const { errors, isValid } = validateProfileInput;
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    // check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
 
     // Get fields
     const profileFields = {};
@@ -68,27 +73,32 @@ router.post(
       profileFields.skills = req.body.skills.split(",");
     }
 
-    // pull Social
+    // pull Social media urls from reb.body
     profileFields.social = {}; // initialize empty field
-    if (req.body.linkedIn) profileFields.linkedIn = req.body.linkedIn;
-    if (req.body.youtube) profileFields.youtube = req.body.youtube;
-    if (req.body.twitter) profileFields.twitter = req.body.twitter;
-    if (req.body.facebook) profileFields.facebook = req.body.facebook;
-    if (req.body.instagram) profileFields.instagram = req.body.instagram;
+    if (req.body.linkedIn) profileFields.social.linkedIn = req.body.linkedIn;
+    if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
+    if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
+    if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
+    if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
     // determine if its update or create
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
         // update
+        console.log("start update logic");
         Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
         )
-          .then(profile => res.json(profile))
+          .then(profile => {
+            console.log("updated profile.");
+            res.json(profile);
+          })
           .catch(err => res.json(err));
       } else {
         // CREATE
+        console.log("start create logic");
         // CHECK if handle exists
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
