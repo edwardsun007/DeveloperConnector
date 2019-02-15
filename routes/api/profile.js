@@ -31,6 +31,7 @@ router.get(
     // passport middleware returns user object to the req
     console.log("profile/ check req.user", req.user);
     Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar"]) // we want to pull avatar and name off the user object we found
       .then(profile => {
         if (!profile) {
           errors.noprofile = "There is no profile for this user!";
@@ -41,6 +42,43 @@ router.get(
       .catch(err => res.status(404).json(err));
   }
 );
+
+// @route GET api/profile/handle/:handle
+// @desc GET profile by handle
+// @access Public route
+router.get("/handle/:handle", (req, res) => {
+  console.log(req.params.handle);
+  const errors = {};
+  Profile.findOne({ handle: req.params.handle })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user";
+        return res.status(404).json(errors);
+      }
+
+      res.status(200).json(profile);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
+// @route GET api/profile/user/:user_id
+// @desc GET profile by id
+// @access Protected Internal route
+router.get("/user/:user_id", (req, res) => {
+  const errors = {};
+  Profile.findOne({ user: req.params.user_id })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user";
+        return res.status(404).json(errors);
+      }
+
+      res.status(200).json(profile);
+    })
+    .catch(err => res.status(404).json(err));
+});
 
 // @route POST api/profile/
 // @desc CREATE new profile or EDIT profile for registered user
