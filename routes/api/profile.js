@@ -10,8 +10,9 @@ const Profile = require("../../models/Profile");
 /* Load User profile */
 const User = require("../../models/User");
 
-/* Load validator */
+/* Load validators */
 const validateProfileInput = require("../../validation/profile");
+const validateExperienceInput = require("../../validation/experience");
 
 // @route GET api/profile/test
 // @desc Test profile route
@@ -168,4 +169,42 @@ router.post(
     });
   }
 );
+
+// @route POST api/profile/experience
+// @desc Add experience to profile
+// @access Private
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    // validate profileinput
+    const { errors, isValid } = validateExperienceInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newExp = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+
+      if (req.body.current == "true") {
+        newExp.current = true;
+      }
+
+      // Add to exp array, but at the beginning of the array
+      profile.experience.unshift(newExp);
+      profile.save().then(profile => res.json(profile));
+    });
+  }
+);
+
 module.exports = router;
