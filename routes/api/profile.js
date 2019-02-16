@@ -20,6 +20,23 @@ router.get("/test", (req, res) => {
   res.status(200).json("/api/profile/test works!");
 });
 
+// @route GET api/profile/all
+// @desc Test profile route
+// @access Public
+router.get("/all", (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate("user", ["name", "avatar"])
+    .then(profiles => {
+      if (!profiles) {
+        errors.profiles = "There are no profiles!";
+        return res.status(404).json(errors);
+      }
+      res.status(200).json(profiles);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
 // @route GET api/profile/
 // @desc GET current user's profile
 // @access Private--protected route
