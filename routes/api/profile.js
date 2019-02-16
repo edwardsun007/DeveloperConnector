@@ -13,6 +13,7 @@ const User = require("../../models/User");
 /* Load validators */
 const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
+const validateEducationInput = require("../../validation/education");
 
 // @route GET api/profile/test
 // @desc Test profile route
@@ -201,10 +202,47 @@ router.post(
       }
 
       // Add to exp array, but at the beginning of the array
+      // so that mose recent work experience stays at top
       profile.experience.unshift(newExp);
       profile.save().then(profile => res.json(profile));
     });
   }
 );
 
+// @route POST api/profile/education
+// @desc Add education to a user's profile
+// @access Private
+router.post(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    // validate profileinput
+    const { errors, isValid } = validateEducationInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newEdu = {
+        school: req.body.school,
+        degree: req.body.degree,
+        major: req.body.major,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+
+      if (req.body.current == "true") {
+        newEdu.current = true;
+      }
+
+      // Add to edu array at the beginning of the array
+      profile.education.unshift(newEdu);
+      profile.save().then(profile => res.json(profile));
+    });
+  }
+);
 module.exports = router;
