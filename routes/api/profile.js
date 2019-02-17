@@ -245,4 +245,66 @@ router.post(
     });
   }
 );
+
+// @route DELETE api/profile/experience/:exp_id
+// @desc Delete existing experience from profile by id
+// @access Private
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("api delete experience called");
+    const inputExpId = req.params.exp_id;
+    /*process:  1. find user from req.user 
+                2. find the index of exp_id inside experience array
+                3. splice
+                4. save
+    */
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const removeIndex = profile.experience
+          .map(exp => exp.id)
+          .indexOf(inputExpId);
+
+        // Splice it out of experience array
+        profile.experience.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.status(200).json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route DELETE api/profile/education/:edu_id
+// @desc Delete existing education from profile by edu_id
+// @access Private
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("api delete education called");
+    const inputEduId = req.params.edu_id;
+    /*process:  1. find user from req.user 
+                2. find the index of edu_id inside education array
+                3. splice
+                4. save
+    */
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const removeIndex = profile.education
+          .map(edu => edu.id)
+          .indexOf(inputEduId);
+        console.log("profile.education.size=", profile.education.length);
+        console.log("removeIndex=", removeIndex);
+
+        // Splice it out of education array
+        profile.education.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.status(200).json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
 module.exports = router;
