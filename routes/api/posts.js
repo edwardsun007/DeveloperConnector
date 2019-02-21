@@ -10,6 +10,10 @@ const Post = require("../../models/Post");
 // Profile Model
 const Profile = require("../../models/Profile");
 
+// Validators
+const validatePostInput = require("../../validation/posts");
+const validateCommentInput = require("../../validation/comments");
+
 // @route GET api/posts/test
 // @desc Test posts route
 // @access Public
@@ -47,6 +51,13 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
     const newPost = new Post({
       text: req.body.text,
       name: req.body.name,
@@ -123,26 +134,6 @@ router.post(
               .save()
               .then(() => res.status(200).json(post))
               .catch(err => res.status(401).json(err));
-            //   found = false;
-            //   post.likes.map(ele => {
-            //     if (ele.user.toString() === req.user.id) {
-            //       console.log("current user liked it");
-            //       found = true;
-            //       return res
-            //         .status(400)
-            //         .json({ liked: "User already liked this post" });
-            //     }
-            //   });
-            //   if (found == false) {
-            //     //Add user to the likes array
-            //     post.likes.push({ user: req.user.id }); // schema for likes: [ {user: id} ]
-            //     post
-            //       .save()
-            //       .then(() => res.json(post))
-            //       .catch(err => res.status(401).json(err));
-            //   }
-            // })
-            // .catch(err => res.status(404).json({ error: "Post not found" }));
           })
           .catch(err => res.status(404).json({ error: "Profile not found" }));
       })
@@ -190,4 +181,41 @@ router.post(
       .catch(err => res.status(404).json({ error: "profile not found" }));
   }
 );
+
+/**** Comment API ****/
+// @route POST api/posts/comment/:post_id
+// @desc Add comment for a post
+// @access Private
+router.post(
+  "/comment/:post_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateCommentInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Post.findById(req.params.post_id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        // Push to comments array
+        post.comments.unshift(newComment);
+
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => res.status(400).json(err));
+      })
+      .catch(err => res.status(404).json({ error: "Post not found" }));
+  }
+);
+
 module.exports = router;
