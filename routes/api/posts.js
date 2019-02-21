@@ -110,7 +110,6 @@ router.post(
         Post.findById(req.params.post_id)
           .then(post => {
             // Check if this user in likes array
-            console.log("current user id=", req.user.id);
             if (
               post.likes.filter(ele => ele.user.toString() === req.user.id)
                 .length > 0
@@ -163,7 +162,6 @@ router.post(
         Post.findById(req.params.post_id)
           .then(post => {
             // Check if this user in likes array
-            console.log("current user id=", req.user.id);
             if (
               post.likes.filter(ele => ele.user.toString() === req.user.id)
                 .length === 0
@@ -173,18 +171,21 @@ router.post(
                 .json({ liked: "You have not liked this post yet!" });
             }
             // Get remove index
-            const remove = posts.likes
+            const removeIdx = post.likes
               .map(item => item.user.toString())
               .indexOf(req.user.id);
             // splice it out of likes array
-            posts.likes.splice(remove, 1);
-            post.likes.push({ user: req.user.id }); // schema for likes: [ {user: id} ]
+            post.likes.splice(removeIdx, 1);
+            // Save
             post
               .save()
               .then(() => res.status(200).json(post))
               .catch(err => res.status(401).json(err));
           })
-          .catch(err => res.status(404).json({ error: "Profile not found" }));
+          .catch(err => {
+            console.log("error from find post,", err);
+            res.status(404).json(err);
+          });
       })
       .catch(err => res.status(404).json({ error: "profile not found" }));
   }
