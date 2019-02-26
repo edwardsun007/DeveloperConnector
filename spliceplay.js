@@ -26,5 +26,5 @@ const idarr = experience.map(exp => exp._id);
 console.log(idarr);
 
 const removeIndex = experience.map(exp => exp._id).indexOf(exp_id);
-
+console.log("something");
 console.log(removeIndex);
