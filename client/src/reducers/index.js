@@ -1,2 +1,7 @@
 /* this ismaster file for import other reducers */
-import { combineReducer } from "redux";
+import { combineReducers } from "redux";
+import authReducer from "./authReducer";
+
+export default combineReducers({
+  auth: authReducer
+});
