@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import classnames from "classnames";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authAction";
+import { registerUser } from "../../actions/authActions";
 
 class Register extends Component {
   constructor() {
@@ -37,10 +37,13 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    axios
-      .post("/api/users/register", newUser) // returns a promise
-      .then(res => console.log(res.user))
-      .catch(err => this.setState({ errors: err.response.data }));
+    // dispatched action come into component as a props
+    this.props.registerUser(newUser);
+
+    // axios
+    //   .post("/api/users/register", newUser) // returns a promise
+    //   .then(res => console.log(res.user))
+    //   .catch(err => this.setState({ errors: err.response.data }));
   }
 
   render() {

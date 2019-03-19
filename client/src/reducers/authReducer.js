@@ -9,6 +9,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case TEST_DISPATCH:
+      console.log("authReducer action.payload=", action.payload);
       return {
         ...state,
         user: action.payload // this line grab payload from action file assign it to user object
