@@ -5,7 +5,7 @@ const initialState = {
   user: {}
 };
 
-/* we set a default state here for our authReducer is nothing is passed */
+/* we set a default preloaded state here for our authReducer */
 export default function(state = initialState, action) {
   switch (action.type) {
     case TEST_DISPATCH:
