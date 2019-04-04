@@ -138,7 +138,7 @@ class Register extends Component {
 }
 
 // all action passed in will be mapped as props of Register component remember,
-// so the proeprty / key name below need to matched identical as the one you give in action.js
+// so the property / key name below need to matched identical as the one you give in action.js
 // so that we can visit by doing this.props.auth   or this.props.registerUser or this.props.errors
 Register.propTypes = {
   registerUser: propTypes.func.isRequired, // registerUser is a function and its required
