@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import propTypes from "prop-types";
 import classnames from "classnames";
+import { withRouter } from "react-router-dom"; //
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 
@@ -18,6 +19,15 @@ class Register extends Component {
     // bind
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  // redux state pass errors state from action and pass in to this component as errors props
+  // then here once we receive new props, if errors is inside the props, here we set Register's component state.errors
+  // note its component state.errors here not Redux state
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   onChange(e) {
@@ -38,16 +48,12 @@ class Register extends Component {
     };
 
     // dispatched action come into component as a props
-    this.props.registerUser(newUser);
-
-    // axios
-    //   .post("/api/users/register", newUser) // returns a promise
-    //   .then(res => console.log(res.user))
-    //   .catch(err => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser, this.props.history); // allow to redirect to this.props.history within registerUser action
   }
 
   render() {
-    const { errors } = this.state; // es6 destructing syntax
+    // this is component state remember not redux state
+    const { errors } = this.state; // es6 destructing syntax-- const errors = this.state.errors
 
     return (
       <div className="register">
@@ -87,8 +93,8 @@ class Register extends Component {
                     <div className="invalid-feedback">{errors.email}</div>
                   )}
                   <small className="form-text text-muted">
-                    This site uses Gravatar so if you want a profile image, use
-                    a Gravatar email
+                    This site uses Gravatar for profile image, please register
+                    with a Gravatar email
                   </small>
                 </div>
                 <div className="form-group">
@@ -131,7 +137,21 @@ class Register extends Component {
   }
 }
 
+// all action passed in will be mapped as props of Register component remember,
+// so the proeprty / key name below need to matched identical as the one you give in action.js
+// so that we can visit by doing this.props.auth   or this.props.registerUser or this.props.errors
+Register.propTypes = {
+  registerUser: propTypes.func.isRequired, // registerUser is a function and its required
+  auth: propTypes.object.isRequired, // auth is object and its required
+  errors: propTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth, // auth need to obey the name you set in combine reducer
+  errors: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerUser }
-)(Register);
+)(withRouter(Register));
