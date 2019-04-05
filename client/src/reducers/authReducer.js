@@ -14,8 +14,8 @@ export default function(state = initialState, action) {
     case SET_CURRENT_USER:
       return {
         ...state,
-        isAuthenticated: !isEmpty(action.payload),
-        user: action.payload
+        isAuthenticated: !isEmpty(action.payload), // we utilize isEmpty on check payload to change the state isAuthenticated, when its empty object, it will be reseted, so we can implement our logout action in authAction to pass empty object {} to reset it.
+        user: action.payload // same way if payload is empty {}, user will also be reseted to its initial state to log us out
       };
     // remember setCurrentUser action's payload is decoded token that has user info in it
 

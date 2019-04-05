@@ -21,6 +21,13 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  // To prevent a authenticaed user sees SignUp form via visitng /domain/register, simply redirect it
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard"); // redirect
+    }
+  }
+
   // redux state pass errors state from action and pass in to this component as errors props
   // then here once we receive new props, if errors is inside the props, here we set Register's component state.errors
   // note its component state.errors here not Redux state

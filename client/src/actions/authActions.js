@@ -4,6 +4,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
+// action registerUser is to register a user and then redirect to login page
 export const registerUser = (userData, history) => dispatch => {
   console.log("authActions: userData=", userData);
   axios
@@ -18,11 +19,11 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
-// Login - Get Token
+// action Login - purpose is to Get Token
 export const loginUser = userData => dispatch => {
   console.log("authActions: loginUser starts");
   axios
-    .post("/api/user/login", userData)
+    .post("/api/users/login", userData)
     .then(res => {
       console.log("user login successfully");
       // once user login success, 1st need to save token to local storage
@@ -45,11 +46,21 @@ export const loginUser = userData => dispatch => {
     });
 };
 
-// action setCurrentUser
+// action setCurrentUser purpose is to decode a generated token and pass down decoded user Info
 // set logged in user
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
     payload: decoded
   };
+};
+
+// action logUserOut purpose is to clear the token and reset isAuthentencated state
+export const logoutUser = () => dispatch => {
+  // remove token
+  localStorage.removeItem("jwtToken");
+  // call our setAuthToken to remove it from our Authentication header
+  setAuthToken(false);
+  // set current user to {} so that isAuthenticated can be reseted to false
+  dispatch(setCurrentUser({}));
 };
