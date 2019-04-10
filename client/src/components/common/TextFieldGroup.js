@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import propTypes from "prop-types";
 
+// pass properties into functional component
 const TextFieldGroup = ({
   name,
   placeholder,
@@ -43,7 +44,7 @@ TextFieldGroup.propTypes = {
   disabled: propTypes.string
 };
 
-// default types if not defined
+// default types if we don't pass anything
 TextFieldGroup.defaultProps = {
   type: "text"
 };
