@@ -28,13 +28,14 @@ export const loginUser = userData => dispatch => {
       console.log("user login successfully");
       // once user login success, 1st need to save token to local storage
       const token = res.data.token;
-      console.log();
       // so here we set token to local
       localStorage.setItem("jwtToken", token);
       // then we need to set token in Authentication header, we create a separate utility for this
       setAuthToken(token);
       // decode jwt token to access user data
       const decoded = jwt_decode(token);
+      console.log("checking decoded:");
+      console.dir(decoded);
       // then we dispatch setCurrentUser action to our reducer
       dispatch(setCurrentUser(decoded));
     })

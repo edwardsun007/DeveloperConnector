@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import propTypes from "prop-types";
 import { connect } from "react-redux"; // anything that need be updated corresponding to state requires Redux period.
-import { logoutUser } from "../../actions/authActions";
+import { logoutUser } from "../../actions/authActions"; // we need to import the actions
+import { clearCurrentProfile } from "../../actions/profileActions"; // actions need to be dispatched thru reducer
 
 class Navbar extends Component {
+  // we need to call clearProfile action itself before logoutUser action
   onLogoutClick(e) {
     e.preventDefault();
+    this.props.clearCurrentProfile();
     this.props.logoutUser();
   }
 
@@ -79,8 +82,10 @@ class Navbar extends Component {
   }
 }
 
+// actions
 Navbar.propTypes = {
   logoutUser: propTypes.func.isRequired,
+  clearCurrentProfile: propTypes.func.isRequired,
   auth: propTypes.object.isRequired
 };
 
@@ -88,7 +93,9 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
+// you need to include all action you needed for component put in the mapDispatchToProps argument
+// and you need mapStateToProps if you component need receive dynamic state / redux state / data will change
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, clearCurrentProfile }
 )(Navbar);

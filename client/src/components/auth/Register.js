@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
-import classnames from "classnames";
 import { withRouter } from "react-router-dom"; //
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import propTypes from "prop-types"; // in development, this helps us checking whehter a compnent props is in the correct type that we want
 // note this only for dev environment
 import { connect } from "react-redux"; // we need redux for this
-import classnames from "classnames"; // for validations
 import { loginUser } from "../../actions/authActions"; // we need login action
 import TextFieldGroup from "../common/TextFieldGroup";
 
