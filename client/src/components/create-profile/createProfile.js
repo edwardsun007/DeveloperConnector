@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import propTypes from "prop-types";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
+import { createProfileAction } from "../../actions/profileActions";
 
 class createProfile extends Component {
   constructor(props) {
@@ -29,13 +31,40 @@ class createProfile extends Component {
 
     // bind this
     this.onChange = this.onChange.bind(this);
-    this.onChange = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
+  //
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  // for interaction its best to create action for it
   onSubmit(e) {
+    console.log("onSubmitStarts..");
     e.preventDefault();
 
-    console.log("Submit starts...");
+    // create a object that has the latest component state of each input
+    const profileData = {
+      handle: this.state.handle,
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      status: this.state.status,
+      skills: this.state.skills,
+      githubusername: this.state.githubusername,
+      bio: this.state.bio,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      youtube: this.state.youtube,
+      instagram: this.state.instagram
+    };
+    // call action pass in the obj
+    console.log("calling createProfileAction");
+    this.props.createProfileAction(profileData, this.props.history);
   }
 
   onChange(e) {
@@ -103,7 +132,7 @@ class createProfile extends Component {
     // select options for status
     const options = [
       {
-        label: "select professional Status",
+        label: "select professional status",
         value: 0
       },
       {
@@ -278,4 +307,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps)(createProfile);
+export default connect(
+  mapStateToProps,
+  { createProfileAction }
+)(withRouter(createProfile));
