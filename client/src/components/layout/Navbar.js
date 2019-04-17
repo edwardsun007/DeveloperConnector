@@ -19,8 +19,17 @@ class Navbar extends Component {
 
     // this is how I do it:  authenticated user will see authLinks--postFeed, DashBoard, logout
     const authLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
+      <ul className="navbar-nav my-auto">
+        <li className="nav-item my-auto">
+          <Link
+            className="nav-link"
+            to="/dashboard"
+            style={{ fontSize: "1.6em" }}
+          >
+            Dashboard
+          </Link>
+        </li>
+        <li className="nav-item my-auto">
           <a onClick={this.onLogoutClick.bind(this)} className="nav-link">
             <img
               className="rounded-circle"

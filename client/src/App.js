@@ -12,7 +12,9 @@ import Landing from "./components/layout/Landing"; // landing component
 import Register from "./components/auth/Register"; // signup component
 import Login from "./components/auth/Login"; // login component
 import Dashboard from "./components/dashboard/dashboard"; // dashboard component
-import CreateProfile from "./components/create-profile/createProfile";
+import CreateProfile from "./components/create-profile/createProfile"; // for create new profile
+import EditProfile from "./components/edit-profile/EditProfile"; // for edit existing profile
+
 import PrivateRoute from "./components/common/PrivateRoute";
 
 import "./App.css";
@@ -60,6 +62,13 @@ class App extends Component {
                   exact
                   path="/create-profile"
                   component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
                 />
               </Switch>
             </div>
