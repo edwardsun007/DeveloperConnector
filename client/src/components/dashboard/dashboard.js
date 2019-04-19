@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { getCurrentProfile, deleteAccount } from "../../actions/profileActions";
 import Spinner from "../common/Spinner";
 import ProfileActions from "./profileActions";
+import Experience from "./Experience";
+import Education from "./Education";
 
 class Dashboard extends Component {
   // call it right away
@@ -40,7 +42,10 @@ class Dashboard extends Component {
               Wecome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </p>
             <ProfileActions />
-            {/* TODO: exp and education */}
+            {/* TODO: exp and education 
+            to finish this: we simply need to get profile and education from our component's profile (which comes from redux state)
+            and experience is inside the profile object
+            */}
             <div style={{ marginBottom: "60px" }}>
               <button
                 className="btn btn-danger"

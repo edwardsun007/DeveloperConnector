@@ -35,16 +35,19 @@ class editProfile extends Component {
 
     // bind this
     this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   // the first thing we want is to get user's current profile, this happens as soon as the this component mounted
   componentDidMount() {
+    console.log("edit -> componentDidMount started...");
     this.props.getCurrentProfile();
   }
 
-  //
+  // 1. if there is error from user input, this method will receive new error state and then setState
+  // 2. this function will also retrieve profile object from redux state and set them for each input field
   componentWillReceiveProps(nextProps) {
+    console.log("edit-> componentsReceivedProps receive props...");
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
@@ -55,11 +58,14 @@ class editProfile extends Component {
       const profile = nextProps.profile.profile;
       // Bring skills array into a csv string
       const skillsCSV = profile.skills.join(","); // rebuilt the string
+      console.log(`skillsCSV=${skillsCSV}`);
       // if user doesn't have profile it will be empty so use validator here
       // if profile field doesn't exist, make empty string
       profile.company = !isEmpty(profile.company) ? profile.company : "";
       profile.website = !isEmpty(profile.website) ? profile.website : "";
       profile.location = !isEmpty(profile.location) ? profile.location : "";
+      profile.status = !isEmpty(profile.status) ? profile.status : "";
+
       profile.githubusername = !isEmpty(profile.githubusername)
         ? profile.githubusername
         : "";
@@ -78,7 +84,7 @@ class editProfile extends Component {
         website: profile.website,
         location: profile.location,
         status: profile.status,
-        skills: profile.skills,
+        skills: skillsCSV,
         githubusername: profile.githubusername,
         bio: profile.bio,
         twitter: profile.twitter,
@@ -91,8 +97,8 @@ class editProfile extends Component {
   }
 
   // for interaction its best to create action for it
-  onSubmit(e) {
-    console.log("onSubmitStarts..");
+  onSave(e) {
+    console.log("edit -> onSave started..");
     e.preventDefault();
 
     // create a object that has the latest component state of each input
@@ -117,6 +123,7 @@ class editProfile extends Component {
   }
 
   onChange(e) {
+    console.log("edit->onChange called...");
     this.setState({ [e.target.name]: e.target.value });
   }
 
@@ -127,56 +134,56 @@ class editProfile extends Component {
     // initialize it
     let socialInputs;
     // if component state displaySocialinput is true then render socialInputs
-    if (displaySocialInputs) {
-      socialInputs = (
-        <div>
-          <InputGroup
-            placeholder="Twitter Profile URL"
-            name="twitter"
-            icon="fab fa-twitter"
-            value={this.state.twitter}
-            onChange={this.onChange}
-            error={errors.twitter}
-          />
+    // if (displaySocialInputs) {
+    socialInputs = (
+      <div>
+        <InputGroup
+          placeholder="Twitter Profile URL"
+          name="twitter"
+          icon="fab fa-twitter"
+          value={this.state.twitter}
+          onChange={this.onChange}
+          error={errors.twitter}
+        />
 
-          <InputGroup
-            placeholder="Facebook Page URL"
-            name="facebook"
-            icon="fab fa-facebook"
-            value={this.state.facebook}
-            onChange={this.onChange}
-            error={errors.facebook}
-          />
+        <InputGroup
+          placeholder="Facebook Page URL"
+          name="facebook"
+          icon="fab fa-facebook"
+          value={this.state.facebook}
+          onChange={this.onChange}
+          error={errors.facebook}
+        />
 
-          <InputGroup
-            placeholder="LinkedIn Profile URL"
-            name="linkedin"
-            icon="fab fa-linkedin"
-            value={this.state.linkedin}
-            onChange={this.onChange}
-            error={errors.linkedin}
-          />
+        <InputGroup
+          placeholder="LinkedIn Profile URL"
+          name="linkedin"
+          icon="fab fa-linkedin"
+          value={this.state.linkedin}
+          onChange={this.onChange}
+          error={errors.linkedin}
+        />
 
-          <InputGroup
-            placeholder="Youtube Channel URL"
-            name="youtube"
-            icon="fab fa-youtube"
-            value={this.state.youtube}
-            onChange={this.onChange}
-            error={errors.youtube}
-          />
+        <InputGroup
+          placeholder="Youtube Channel URL"
+          name="youtube"
+          icon="fab fa-youtube"
+          value={this.state.youtube}
+          onChange={this.onChange}
+          error={errors.youtube}
+        />
 
-          <InputGroup
-            placeholder="Instagram URL"
-            name="instagram"
-            icon="fab fa-instagram"
-            value={this.state.instagram}
-            onChange={this.onChange}
-            error={errors.instagram}
-          />
-        </div>
-      );
-    }
+        <InputGroup
+          placeholder="Instagram URL"
+          name="instagram"
+          icon="fab fa-instagram"
+          value={this.state.instagram}
+          onChange={this.onChange}
+          error={errors.instagram}
+        />
+      </div>
+    );
+    //}
 
     // select options for status
     const options = [
@@ -234,6 +241,7 @@ class editProfile extends Component {
     const rows = 6;
 
     return (
+      // onSubmit={this.onSubmit}
       <div className="create-profile">
         <div className="container">
           <div className="row">
@@ -243,7 +251,7 @@ class editProfile extends Component {
                 Save your changes before leaving this page
               </p>
               <small className="d-block pb-3">* = required fields</small>
-              <form onSubmit={this.onSubmit}>
+              <form>
                 <TextFieldGroup
                   placeholder="* Profile Handle"
                   name="handle"
@@ -318,23 +326,16 @@ class editProfile extends Component {
                   info="Tell us a bit about yourself"
                 />
 
-                <div className="mb-3">
-                  <button
-                    onClick={() => {
-                      this.setState(prevState => ({
-                        displaySocialInputs: !prevState.displaySocialInputs
-                      }));
-                    }}
-                    className="btn btn-light"
-                  >
-                    Add Social Network links
-                  </button>
+                <div className="mb-4">
+                  <h3>Edit Social Network links</h3>
                   <span className="text-muted">Optional</span>
                 </div>
                 {socialInputs}
+
                 <input
                   type="submit"
                   value="Save"
+                  onClick={this.onSave}
                   className="btn btn-info btn-block mt-4"
                 />
               </form>
@@ -347,7 +348,7 @@ class editProfile extends Component {
 }
 
 editProfile.propTypes = {
-  creatProfile: propTypes.func.isRequired,
+  createProfileAction: propTypes.func.isRequired,
   getCurrentProfile: propTypes.func.isRequired,
   profile: propTypes.object.isRequired,
   errors: propTypes.object.isRequired

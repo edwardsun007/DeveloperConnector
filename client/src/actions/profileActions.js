@@ -45,6 +45,46 @@ export const createProfileAction = (profileData, history) => dispatch => {
     );
 };
 
+// addd Experience Action
+export const addExpAction = (expData, history) => dispatch => {
+  axios
+    .post("/api/profile/experience", expData)
+    .then(res => history.push("/dashboard"))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// addd Education Action
+export const addEduAction = (eduData, history) => dispatch => {
+  axios
+    .post("/api/profile/education", eduData)
+    .then(res => history.push("/dashboard"))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Set Profile Loding
+export const setProfileLoading = () => {
+  return {
+    type: PROFILE_LOADING
+  };
+};
+
+// Clear current profile
+export const clearCurrentProfile = () => {
+  return {
+    type: CLEAR_CURRENT_PROFILE
+  };
+};
+
 // **** Delete account action ****
 // This actually delete both the user and its profile from mongoDB backend
 // the delete profile backend actually find the profile delete it and then find the user remove it so it does both for us
@@ -73,18 +113,4 @@ export const deleteAccount = history => dispatch => {
         })
       );
   }
-};
-
-// Set Profile Loding
-export const setProfileLoading = () => {
-  return {
-    type: PROFILE_LOADING
-  };
-};
-
-// Clear current profile
-export const clearCurrentProfile = () => {
-  return {
-    type: CLEAR_CURRENT_PROFILE
-  };
 };

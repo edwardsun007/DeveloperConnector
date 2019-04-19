@@ -48,7 +48,7 @@ router.get(
   (req, res) => {
     const errors = {};
     // passport middleware returns user object to the req
-    console.log("profile/ check req.user", req.user);
+    console.log("profile  /  check req.user", req.user);
     Profile.findOne({ user: req.user.id })
       .populate("user", ["name", "avatar"]) // we want to pull avatar and name off the user object we found
       .then(profile => {
