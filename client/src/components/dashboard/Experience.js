@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
 import { withRouter } from "react-router-dom";
+import Moment from "react-moment"; // for formating date
+// delete Exp Action
 
 class Experience extends Component {
   render() {
@@ -10,7 +12,12 @@ class Experience extends Component {
         <td>{exp.company}</td>
         <td>{exp.title}</td>
         <td>
-          {exp.from} - {exp.to}
+          <Moment format="YYYY/MM/DD">{exp.from}</Moment> -{" "}
+          {exp.to === null ? (
+            " Now"
+          ) : (
+            <Moment format="YYYY/MM/DD">{exp.to}</Moment>
+          )}
         </td>
         <td>
           <button className="btn btn-danger">DELETE</button>
@@ -30,7 +37,7 @@ class Experience extends Component {
               <th />
             </tr>
           </thead>
-          <tbody>{experience}</tbody>
+          {experience}
         </table>
       </div>
     );
