@@ -75,7 +75,26 @@ export const addEduAction = (eduData, history) => dispatch => {
 export const deleteExpAction = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
-    // we dispatch GET_PROFILE action type to reducer just to get the latest profile after change
+    // we dispatch GET_PROFILE action type to reducer just to get the latest profile after del
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// delete edu Action
+export const deleteEduAction = id => dispatch => {
+  axios
+    .delete(`/api/profile/education/${id}`)
+    // we dispatch GET_PROFILE action type to reducer just to get the latest profile after del
     .then(res =>
       dispatch({
         type: GET_PROFILE,
