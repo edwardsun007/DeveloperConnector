@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
-import { withRouter } from "react-router-dom";
 import Moment from "react-moment"; // for formating date
-// delete Exp Action
+import { deleteExpAction } from "../../actions/profileActions"; // delete Exp Action
 
 class Experience extends Component {
+  // pass in the exp id of the one we want delete,
+  // then it should redirect to
+  onDeleteClick(id) {
+    this.props.deleteExpAction(id);
+  }
+
   render() {
     const experience = this.props.experience.map(exp => (
       <tr key={exp._id}>
@@ -20,7 +25,12 @@ class Experience extends Component {
           )}
         </td>
         <td>
-          <button className="btn btn-danger">DELETE</button>
+          <button
+            className="btn btn-danger"
+            onClick={this.onDeleteClick.bind(this, exp._id)}
+          >
+            DELETE
+          </button>
         </td>
       </tr>
     )); // array of experiences passed down from parent component dashboard;
@@ -37,11 +47,18 @@ class Experience extends Component {
               <th />
             </tr>
           </thead>
-          {experience}
+          <tbody>{experience}</tbody>
         </table>
       </div>
     );
   }
 }
 
-export default connect(null)(withRouter(Experience));
+Experience.propTypes = {
+  deleteExpAction: propTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { deleteExpAction }
+)(Experience);

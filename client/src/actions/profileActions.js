@@ -71,6 +71,25 @@ export const addEduAction = (eduData, history) => dispatch => {
     );
 };
 
+// delete experience Action
+export const deleteExpAction = id => dispatch => {
+  axios
+    .delete(`/api/profile/experience/${id}`)
+    // we dispatch GET_PROFILE action type to reducer just to get the latest profile after change
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 // Set Profile Loding
 export const setProfileLoading = () => {
   return {
