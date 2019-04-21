@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
 import isEmpty from "../../validations/is-Empty";
-import { spawn } from "child_process";
 
 class ProfileItem extends Component {
   render() {
