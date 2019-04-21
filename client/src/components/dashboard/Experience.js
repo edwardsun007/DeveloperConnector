@@ -5,9 +5,14 @@ import Moment from "react-moment"; // for formating date
 import { deleteExpAction } from "../../actions/profileActions"; // delete Exp Action
 
 class Experience extends Component {
+  constructor() {
+    super();
+    console.log("Experience constructor started.");
+  }
   // pass in the exp id of the one we want delete,
   // then it should redirect to
   onDeleteClick(id) {
+    console.log("delete experience clicked");
     this.props.deleteExpAction(id);
   }
 

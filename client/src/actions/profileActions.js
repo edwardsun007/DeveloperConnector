@@ -5,7 +5,8 @@ import {
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  GET_PROFILES
 } from "./types";
 
 // GET current profile
@@ -27,6 +28,29 @@ export const getCurrentProfile = () => dispatch => {
       dispatch({
         type: GET_PROFILE,
         payload: {}
+      })
+    );
+};
+
+// GET ALL Profiles
+export const getProfiles = () => dispatch => {
+  // call another action called setProfileLoading
+  dispatch(setProfileLoading());
+  axios
+    .get("/api/profile/all")
+    .then(res => {
+      // console.dir(res);
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      });
+    })
+    // if there is err, we simplay dispatch an empty profile instead of errors
+    // because user can create account with no profile
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null // profile state will be null in reducers
       })
     );
 };

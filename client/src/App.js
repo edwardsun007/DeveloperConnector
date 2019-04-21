@@ -17,6 +17,7 @@ import EditProfile from "./components/edit-profile/EditProfile"; // for edit exi
 import AddExperience from "./components/add-experience/AddExperience"; // add experience
 import AddEducation from "./components/add-education/AddEducation";
 import PrivateRoute from "./components/common/PrivateRoute";
+import Profiles from "./components/profiles/Profiles"; // profiles component
 
 import "./App.css";
 
@@ -55,6 +56,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/profiles" component={Profiles} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
