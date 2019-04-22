@@ -19,11 +19,11 @@ class createProfile extends Component {
       location: "",
       status: "",
       skills: "",
-      githubusername: "",
+      githubname: "",
       bio: "",
       twitter: "",
       facebook: "",
-      linkedin: "",
+      linkedIn: "",
       youtube: "",
       instagram: "",
       errors: {}
@@ -54,11 +54,11 @@ class createProfile extends Component {
       location: this.state.location,
       status: this.state.status,
       skills: this.state.skills,
-      githubusername: this.state.githubusername,
+      githubname: this.state.githubname,
       bio: this.state.bio,
       twitter: this.state.twitter,
       facebook: this.state.facebook,
-      linkedin: this.state.linkedin,
+      linkedIn: this.state.linkedIn,
       youtube: this.state.youtube,
       instagram: this.state.instagram
     };
@@ -100,12 +100,12 @@ class createProfile extends Component {
           />
 
           <InputGroup
-            placeholder="LinkedIn Profile URL"
-            name="linkedin"
+            placeholder="linkedIn Profile URL"
+            name="linkedIn"
             icon="fab fa-linkedin"
-            value={this.state.linkedin}
+            value={this.state.linkedIn}
             onChange={this.onChange}
-            error={errors.linkedin}
+            error={errors.linkedIn}
           />
 
           <InputGroup
@@ -252,10 +252,10 @@ class createProfile extends Component {
 
                 <TextFieldGroup
                   placeholder="Github Username"
-                  name="githubusername"
-                  value={this.state.githubusername}
+                  name="githubname"
+                  value={this.state.githubname}
                   onChange={this.onChange}
-                  error={errors.githubusername}
+                  error={errors.githubname}
                   info="If you want DevCon show your latest repos and github link, include your username here"
                 />
 

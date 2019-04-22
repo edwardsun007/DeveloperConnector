@@ -41,8 +41,9 @@ class Profile extends Component {
             <div className="md-6" />
           </div>
           {/* our header and about stuff will go here now
+           *remember here subCompo simply consume the props passed down from Profile compo--read only
            */}
-          <ProfileHeader />
+          <ProfileHeader profile={profile} />
           <ProfileAbout />
           <ProfileCreds />
           <ProfileGithub />

@@ -23,11 +23,11 @@ class editProfile extends Component {
       location: "",
       status: "",
       skills: "",
-      githubusername: "",
+      githubname: "",
       bio: "",
       twitter: "",
       facebook: "",
-      linkedin: "",
+      linkedIn: "",
       youtube: "",
       instagram: "",
       errors: {}
@@ -66,16 +66,26 @@ class editProfile extends Component {
       profile.location = !isEmpty(profile.location) ? profile.location : "";
       profile.status = !isEmpty(profile.status) ? profile.status : "";
 
-      profile.githubusername = !isEmpty(profile.githubusername)
-        ? profile.githubusername
+      profile.githubname = !isEmpty(profile.githubname)
+        ? profile.githubname
         : "";
       profile.bio = !isEmpty(profile.bio) ? profile.bio : "";
       profile.social = !isEmpty(profile.social) ? profile.social : {};
-      profile.twitter = !isEmpty(profile.twitter) ? profile.twitter : "";
-      profile.facebook = !isEmpty(profile.facebook) ? profile.facebook : "";
-      profile.linkedin = !isEmpty(profile.linkedin) ? profile.linkedin : "";
-      profile.youtube = !isEmpty(profile.youtube) ? profile.youtube : "";
-      profile.instagram = !isEmpty(profile.instagram) ? profile.instagram : "";
+      profile.twitter = !isEmpty(profile.social.twitter)
+        ? profile.social.twitter
+        : "";
+      profile.facebook = !isEmpty(profile.social.facebook)
+        ? profile.social.facebook
+        : "";
+      profile.linkedIn = !isEmpty(profile.social.linkedIn)
+        ? profile.social.linkedIn
+        : "";
+      profile.youtube = !isEmpty(profile.social.youtube)
+        ? profile.social.youtube
+        : "";
+      profile.instagram = !isEmpty(profile.social.instagram)
+        ? profile.social.instagram
+        : "";
 
       // set component fields state
       this.setState({
@@ -85,11 +95,11 @@ class editProfile extends Component {
         location: profile.location,
         status: profile.status,
         skills: skillsCSV,
-        githubusername: profile.githubusername,
+        githubname: profile.githubname,
         bio: profile.bio,
         twitter: profile.twitter,
         facebook: profile.facebook,
-        linkedin: profile.linkedin,
+        linkedIn: profile.linkedIn,
         youtube: profile.youtube,
         instagram: profile.instagram
       });
@@ -109,11 +119,11 @@ class editProfile extends Component {
       location: this.state.location,
       status: this.state.status,
       skills: this.state.skills,
-      githubusername: this.state.githubusername,
+      githubname: this.state.githubname,
       bio: this.state.bio,
       twitter: this.state.twitter,
       facebook: this.state.facebook,
-      linkedin: this.state.linkedin,
+      linkedIn: this.state.linkedIn,
       youtube: this.state.youtube,
       instagram: this.state.instagram
     };
@@ -156,12 +166,12 @@ class editProfile extends Component {
         />
 
         <InputGroup
-          placeholder="LinkedIn Profile URL"
-          name="linkedin"
+          placeholder="linkedIn Profile URL"
+          name="linkedIn"
           icon="fab fa-linkedin"
-          value={this.state.linkedin}
+          value={this.state.linkedIn}
           onChange={this.onChange}
-          error={errors.linkedin}
+          error={errors.linkedIn}
         />
 
         <InputGroup
@@ -312,10 +322,10 @@ class editProfile extends Component {
 
                 <TextFieldGroup
                   placeholder="Github Username"
-                  name="githubusername"
-                  value={this.state.githubusername}
+                  name="githubname"
+                  value={this.state.githubname}
                   onChange={this.onChange}
-                  error={errors.githubusername}
+                  error={errors.githubname}
                   info="If you want DevCon show your latest repos and github link, include your username here"
                 />
 
