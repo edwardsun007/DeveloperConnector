@@ -32,6 +32,28 @@ export const getCurrentProfile = () => dispatch => {
     );
 };
 
+// GET getProfileByHandle
+export const getProfileByHandle = handle => dispatch => {
+  // call another action called setProfileLoading
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/profile/handle/${handle}`) // note its api/profile/handle/:handle
+    .then(res => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      });
+    })
+    // if there is err, we simplay dispatch an empty profile instead of errors
+    // because user can create account with no profile
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      })
+    );
+};
+
 // GET ALL Profiles
 export const getProfiles = () => dispatch => {
   // call another action called setProfileLoading
