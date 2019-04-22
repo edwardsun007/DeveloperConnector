@@ -19,6 +19,7 @@ import AddEducation from "./components/add-education/AddEducation";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Profiles from "./components/profiles/Profiles"; // profiles component
 import Profile from "./components/profile/Profile";
+import NotFound from "./components/not-found/NotFound";
 
 import "./App.css";
 
@@ -90,6 +91,7 @@ class App extends Component {
                   component={AddEducation}
                 />
               </Switch>
+              <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />
           </div>
