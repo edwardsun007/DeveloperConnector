@@ -1,9 +1,15 @@
 import axios from "axios";
 
-import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING } from "./types";
+import {
+  ADD_POST,
+  GET_ERRORS,
+  GET_POSTS,
+  POST_LOADING,
+  DELETE_POST
+} from "./types";
 // GET POSTS
 export const getPosts = () => dispatch => {
-  dispatch(setPostLoading);
+  dispatch(setPostLoading); // inside dispatch method is for reducers, and reducer consume action type
   axios
     .get("/api/posts")
     .then(res =>
@@ -37,6 +43,28 @@ export const addPost = postData => dispatch => {
         payload: err.response.data
       })
     );
+};
+
+// Delete Post
+export const deletePost = id => dispatch => {
+  console.log("deletePost Action called");
+  axios
+    .delete(`/api/posts/${id}`)
+    .then(res => {
+      console.log("deletePost action got res:");
+      console.dir(res);
+      dispatch({
+        type: DELETE_POST,
+        payload: id // in reducer we want to delete the post locally ??
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err
+      });
+    });
 };
 
 // set loading state
