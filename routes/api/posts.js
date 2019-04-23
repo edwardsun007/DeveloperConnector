@@ -17,9 +17,9 @@ const validateCommentInput = require("../../validation/comments");
 // @route GET api/posts/test
 // @desc Test posts route
 // @access Public
-router.get("/test", (req, res) => {
-  res.status(200).json("/api/posts/test works!");
-});
+// router.get("/test", (req, res) => {
+//   res.status(200).json("/api/posts/test works!");
+// });
 
 // @route GET api/posts/
 // @desc Get all posts

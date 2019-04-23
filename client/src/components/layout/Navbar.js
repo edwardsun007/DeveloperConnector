@@ -21,6 +21,11 @@ class Navbar extends Component {
     const authLinks = (
       <ul className="navbar-nav my-auto">
         <li className="nav-item my-auto">
+          <Link className="nav-link" to="/feed" style={{ fontSize: "1.6em" }}>
+            Post Feed
+          </Link>
+        </li>
+        <li className="nav-item my-auto">
           <Link
             className="nav-link"
             to="/dashboard"

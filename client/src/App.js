@@ -20,6 +20,7 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import Profiles from "./components/profiles/Profiles"; // profiles component
 import Profile from "./components/profile/Profile";
 import NotFound from "./components/not-found/NotFound";
+import Posts from "./components/posts/Post";
 
 import "./App.css";
 
@@ -91,6 +92,11 @@ class App extends Component {
                   component={AddEducation}
                 />
               </Switch>
+              {/* main page showing all posts */}
+              <Switch>
+                <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
+              {/* all unknown route redirect to here */}
               <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />
