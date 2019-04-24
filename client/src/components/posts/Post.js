@@ -16,7 +16,7 @@ class Posts extends Component {
     const { posts, loading } = this.props.post;
     let postContent;
 
-    if (posts === null || loading) {
+    if (!posts || loading) {
       postContent = <Spinner />;
     } else {
       postContent = <PostFeed posts={posts} />;

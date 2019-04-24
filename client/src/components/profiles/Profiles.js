@@ -15,7 +15,7 @@ class Profiles extends Component {
     let profileItems;
 
     // if there are no profiles or its still loading render spinner
-    if (profiles === null || loading) {
+    if (!profiles || loading) {
       profileItems = <Spinner />;
     } else {
       // if there is profile

@@ -35,6 +35,8 @@ class PostForm extends Component {
 
     // call the action passed thru
     this.props.addPost(postData);
+    // for clearing the form by set component state text to empty
+    this.setState({ text: "" });
   }
 
   onChange(e) {

@@ -6,16 +6,18 @@ import {
   GET_POST,
   GET_POSTS,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  DELETE_COMMENT,
+  CLEAR_ERRORS
 } from "./types";
 
 // GET Single Post
 export const getOnePost = id => dispatch => {
-  dispatch(setPostLoading); // inside dispatch method is for reducers, and reducer consume action type
+  // dispatch(setPostLoading); // inside dispatch method is for reducers, and reducer consume action type
   axios
     .get(`/api/posts/${id}`)
     .then(res => {
-      console.log(res);
+      console.log(res.data);
       dispatch({
         type: GET_POST,
         payload: res.data
@@ -52,6 +54,7 @@ export const getPosts = () => dispatch => {
 
 // ADD POST
 export const addPost = postData => dispatch => {
+  dispatch(clearErrors());
   axios
     .post("/api/posts", postData)
     .then(res =>
@@ -126,6 +129,7 @@ export const removeLike = id => dispatch => {
 
 // add Comment
 export const addComment = (postId, commentData) => dispatch => {
+  dispatch(clearErrors()); // this is for fixing errors still showing up in add comment even comment is valid
   axios
     .post(`/api/posts/comment/${postId}`, commentData)
     .then(res =>
@@ -134,12 +138,46 @@ export const addComment = (postId, commentData) => dispatch => {
         payload: res.data
       })
     )
+    // we don't want to call GET_POST to update component we need GET_ERRORS!
     .catch(err =>
       dispatch({
-        type: GET_POST,
+        type: GET_ERRORS,
         payload: err.response.data
       })
     );
+};
+
+// delete Comment
+export const deleteComment = (postId, commentId) => dispatch => {
+  console.log("in deleteComment, postId=" + postId, "commentId=" + commentId);
+  axios
+    .delete(`/api/posts/comment/${postId}/${commentId}`)
+    .then(res => {
+      console.log(res);
+      dispatch({
+        // this does the front end deletion
+        type: DELETE_COMMENT,
+        payload: commentId
+      });
+      // try dispatch another one for get single post
+      dispatch({
+        type: GET_POST,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// clear Errors action
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
 };
 
 // set loading state

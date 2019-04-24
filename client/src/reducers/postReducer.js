@@ -3,7 +3,8 @@ import {
   GET_POST,
   GET_POSTS,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  DELETE_COMMENT
 } from "../actions/types";
 
 const initialState = {
@@ -21,6 +22,7 @@ export default (state = initialState, action) => {
       };
     // get single post
     case GET_POST:
+      console.log(action.payload);
       return {
         ...state,
         post: action.payload,
@@ -40,12 +42,27 @@ export default (state = initialState, action) => {
         // new post will be added to the beginning of the post arr2ay
       };
 
+    // FrontEnd Deletion need this
     case DELETE_POST:
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload) // payload is id remember, we filter out this id from state.post array
         // new post will be added to the beginning of the post arr2ay
       };
+
+    // We don't really need front end deletion since comments are removed from backend, but
+    // still this fixes crash when last comment is removed. keep it
+    case DELETE_COMMENT:
+      console.log(action.payload);
+      return {
+        ...state,
+        post: state.post
+        // state.post.comments.filter(
+        //   comment => comment._id !== action.payload
+        //)  payload is id remember, we filter out this id from state.post array
+        // new post will be added to the beginning of the post arr2ay
+      };
+
     default:
       return state;
   }
