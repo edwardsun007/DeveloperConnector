@@ -1,5 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-#keys
+# Don't include keys
 /config/keys_dev.js
 
 # compiled output
