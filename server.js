@@ -5,6 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const path = require("path");
 
 // create express instance
 const app = express();
@@ -45,6 +46,15 @@ app.use("/api/users", users);
 app.use("/api/profile", profile);
 app.use("/api/posts", posts);
 
+// Server static assets if in production mode
+if (process.env.NODE_ENV === "production") {
+  // set static folder
+  app.use(express.static("client/build")); // express.static is middleware which servers static files
+  // if its not any of above route, point it to index.html
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 // const server = https.createServer(
 //   {
 //     key: fs.readFileSync("server.key"),
